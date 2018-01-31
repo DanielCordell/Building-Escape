@@ -31,21 +31,26 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	float GetPressurePlateMass();
+
 private:
 	UPROPERTY(EditAnywhere)
-	float openAngle = 90.0f;
+	float openAngle = 90.f;
 
 	UPROPERTY(EditAnywhere)
-	float closedAngle = 20.0f;
+	float closedAngle = 20.f;
 
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* pressurePlate;
 
-	UPROPERTY(EditAnywhere) float closeDelay = 1.0f;
+	UPROPERTY(EditAnywhere) 
+	float closeDelay = 1.f;
+
+	UPROPERTY(EditAnywhere)
+	float triggerMass = 45.f;
 
 	float lastOpenedTime;
 
-	AActor* opener;
 	AActor* openable;
 	UWorld* world;
 	

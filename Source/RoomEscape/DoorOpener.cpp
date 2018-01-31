@@ -3,6 +3,7 @@
 #include "DoorOpener.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/PlayerController.h"
+#include "Components/PrimitiveComponent.h"
 #include "Engine/World.h"
 
 
@@ -29,7 +30,6 @@ void UDoorOpener::BeginPlay()
 
 	world = GetWorld();
 
-	opener = world->GetFirstPlayerController()->GetPawn();
 	openable = GetOwner();
 }
 
@@ -39,7 +39,7 @@ void UDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (pressurePlate->IsOverlappingActor(opener)) {
+	if (GetPressurePlateMass() >= triggerMass) {
 		lastOpenedTime = GetWorld()->GetTimeSeconds();
 		OpenDoor();
 	}
@@ -49,3 +49,16 @@ void UDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	}
 }
 
+
+float UDoorOpener::GetPressurePlateMass() {
+	float totalMass = 0;
+
+	TArray<AActor*> overlappingActors;
+	pressurePlate->GetOverlappingActors(overlappingActors);
+
+	for (const auto* actor : overlappingActors) {
+		totalMass += actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+		UE_LOG()
+	}
+	return totalMass;
+}
