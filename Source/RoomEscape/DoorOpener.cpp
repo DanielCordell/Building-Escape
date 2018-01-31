@@ -50,9 +50,13 @@ void UDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 }
 
 
-float UDoorOpener::GetPressurePlateMass() {
+float UDoorOpener::GetPressurePlateMass() const {
 	float totalMass = 0;
 
+	if (!pressurePlate) {
+		UE_LOG(LogTemp, Error, TEXT("Pressure Plate Not Attatched to %s"), *GetOwner()->GetName());
+		return totalMass;
+	}
 	TArray<AActor*> overlappingActors;
 	pressurePlate->GetOverlappingActors(overlappingActors);
 
