@@ -25,13 +25,13 @@ public:
 
 protected:
 	// Called when the game starts
-	virtual void BeginPlay() override;
+	void BeginPlay() override;
 
 public:	
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	float GetPressurePlateMass();
+	float GetPressurePlateMass() const;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -41,7 +41,7 @@ private:
 	float closedAngle = 20.f;
 
 	UPROPERTY(EditAnywhere)
-	ATriggerVolume* pressurePlate;
+	ATriggerVolume* pressurePlate = nullptr;
 
 	UPROPERTY(EditAnywhere) 
 	float closeDelay = 1.f;
@@ -49,9 +49,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	float triggerMass = 45.f;
 
-	float lastOpenedTime;
+	float lastOpenedTime = 0.f;
 
-	AActor* openable;
-	UWorld* world;
+	AActor* openable = nullptr;
+	UWorld* world = nullptr;
 	
 };
