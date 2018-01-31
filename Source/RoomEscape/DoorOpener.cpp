@@ -19,9 +19,6 @@ UDoorOpener::UDoorOpener()
 
 }
 
-void UDoorOpener::SetDoorRotation(float rotation) const {
-	openable->SetActorRotation({ 0.f, rotation, 0.f });
-}
 
 // Called when the game starts
 void UDoorOpener::BeginPlay()
@@ -40,12 +37,12 @@ void UDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	if (GetPressurePlateMass() >= triggerMass) {
-		lastOpenedTime = GetWorld()->GetTimeSeconds();
-		OpenDoor();
+		isCurrentlyOpen = true;
+		onOpenRequest.Broadcast();
 	}
-
-	if (world->GetTimeSeconds() - lastOpenedTime > closeDelay) {
-		CloseDoor();
+	else if (GetPressurePlateMass() < triggerMass && isCurrentlyOpen) {
+		isCurrentlyOpen = false;
+		OnCloseRequest.Broadcast();
 	}
 }
 

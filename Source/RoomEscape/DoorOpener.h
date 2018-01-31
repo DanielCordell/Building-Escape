@@ -8,6 +8,7 @@
 #include "GameFramework/PlayerController.h"
 #include "DoorOpener.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDoorRequest);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ROOMESCAPE_API UDoorOpener : public UActorComponent
@@ -18,10 +19,11 @@ public:
 	// Sets default values for this component's properties
 	UDoorOpener();
 
-	//Lets us potentially have multiple states of rotation in the future;
-	void SetDoorRotation(float rotation) const;
-	void CloseDoor() const { SetDoorRotation(openAngle); }
-	void OpenDoor() const { SetDoorRotation(closedAngle); }
+	UPROPERTY(BlueprintAssignable)
+	FDoorRequest onOpenRequest;
+
+	UPROPERTY(BlueprintAssignable)
+	FDoorRequest OnCloseRequest;
 
 protected:
 	// Called when the game starts
@@ -34,22 +36,14 @@ public:
 	float GetPressurePlateMass() const;
 
 private:
-	UPROPERTY(EditAnywhere)
-	float openAngle = 90.f;
-
-	UPROPERTY(EditAnywhere)
-	float closedAngle = 20.f;
 
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* pressurePlate = nullptr;
 
-	UPROPERTY(EditAnywhere) 
-	float closeDelay = 1.f;
-
 	UPROPERTY(EditAnywhere)
 	float triggerMass = 45.f;
 
-	float lastOpenedTime = 0.f;
+	bool isCurrentlyOpen = false;
 
 	AActor* openable = nullptr;
 	UWorld* world = nullptr;
